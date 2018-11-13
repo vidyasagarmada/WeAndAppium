@@ -1,0 +1,5 @@
+************************** - SAMPLETEST - DETAILED STEPS - **************************
+
+Navigate to URL - http://google.com
+
+

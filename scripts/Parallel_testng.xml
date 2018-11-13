@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Suite" parallel="tests" thread-count="3">
+	<test name="Test__Android1">
+		<parameter name="PARAMETER_DEVICE_ID" value="192.168.113.147:5555"></parameter>
+		<parameter name="PARAMETER_UDID" value="192.168.113.147:5555"></parameter>
+		<parameter name="PARAMETER_APPIUM_URL" value="http://192.168.113.140:4729"></parameter>
+		<parameter name="PARAMETER_PLATFORM_NAME" value="ANDROID"></parameter>
+		<parameter name="PARAMETER_BROWSER_NAME" value="chrome"></parameter>
+		<classes>
+			<class name="com.dxc.util.misc.Parallel_Test" />
+		</classes>
+	</test>
+
+
+	<test name="Test__Android2">
+		<parameter name="PARAMETER_DEVICE_ID" value="192.168.113.102:5555"></parameter>
+		<parameter name="PARAMETER_UDID" value="192.168.113.102:5555"></parameter>
+		<parameter name="PARAMETER_APPIUM_URL" value="http://192.168.113.140:4725"></parameter>
+		<parameter name="PARAMETER_PLATFORM_NAME" value="ANDROID"></parameter>
+		<parameter name="PARAMETER_BROWSER_NAME" value="chrome"></parameter>
+		<classes>
+			<class name="com.dxc.util.misc.Parallel_Test" />
+		</classes>
+	</test>
+	<test name="Test_iPhone">
+		<parameter name="PARAMETER_DEVICE_ID" value="iPhone 5"></parameter>
+		<parameter name="PARAMETER_UDID" value="91168a7a9055ba0acc1741501893d505d7255d26"></parameter>
+		<parameter name="PARAMETER_APPIUM_URL" value="http://192.168.113.128:4723"></parameter>
+		<parameter name="PARAMETER_PLATFORM_NAME" value="IOS"></parameter>
+		<parameter name="PARAMETER_BROWSER_NAME" value="safari"></parameter>
+		<classes>
+			<class name="com.dxc.util.misc.Parallel_Test" />
+		</classes>
+	</test>
+</suite>

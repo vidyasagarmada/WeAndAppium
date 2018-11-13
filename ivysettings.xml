@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivysettings>
+	<settings defaultResolver="chained"/>
+	<resolvers>
+		<chain name="chained">
+			<ibiblio name="ibiblio" m2compatible="true" />
+			<filesystem name="local1">
+				<artifact pattern="${ivy.settings.dir}/lib/[artifact]-[revision].[ext]" />
+			</filesystem>
+			<filesystem name="local2">
+				<artifact pattern="${ivy.settings.dir}/lib/[artifact].[ext]" />
+			</filesystem>
+		</chain>
+	</resolvers>
+</ivysettings>

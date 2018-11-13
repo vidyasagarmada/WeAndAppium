@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="runTest" name="DXCTestAutomation" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property name="src" location="./src" />
+	<property name="bin" location="./bin" />
+	<property name="lib" location="./lib" />
+	<property name="browser" location="C:/Program Files/Mozilla Firefox/firefox.exe" />
+	<property name="webdriver.firefox.profile" value="default" />
+	<property environment="env" />
+	<property file="resources/dataconfig.properties" />
+	<property name="ivy.install.version" value="2.4.0" />
+	<property name="ivy.jar.dir" value="${ant.library.dir}" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	<tstamp>
+		<format property="run.time" pattern="dd_MMM_yyyy_hh_mm_ss_SSS_aa" />
+	</tstamp>
+
+	<target name="download-ivy" unless="skip.download">
+		<mkdir dir="${ivy.jar.dir}" />
+		<!-- download Ivy from web site so that it can be used even without any special installation -->
+		<echo message="downloading ivy..." />
+		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true" />
+
+	</target>
+
+	<target name="install-ivy" depends="download-ivy" description="--> install ivy">
+		<echo message="installing ivy..." />
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+	</target>
+	<path id="classpath">
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement location="${bin}" />
+	</path>
+
+	<target name="resolve" description="--> retrieve dependencies with ivy" depends="install-ivy">
+		<echo message="resolving ivy : ${ivy.default.settings.dir}">
+		</echo>
+		<ivy:resolve />
+		<ivy:cachepath pathid="lib.path.id" />
+
+		<ivy:addpath topath="classpath">
+			<path refid="lib.path.id" />
+		</ivy:addpath>
+
+	</target>
+	<target name="init" depends="resolve">
+		<echo message="init: Creating bin directory" />
+		<mkdir dir="${bin}" />
+	</target>
+
+	<target name="clean">
+		<echo message="clean: deleting existing bin directory" />
+		<delete dir="${bin}" />
+	</target>
+	<target name="clean-all" depends="clean" description="Purge ivy cache">
+	    <ivy:cleancache/>
+	</target>
+	<target name="compile" depends="clean,init">
+		<echo message="classpath:${test.classpath}" />
+		<echo message="compiling.........." />
+		<javac destdir="${bin}" srcdir="${src}" classpathref="classpath" includeantruntime="false" debug="true" debuglevel="lines,source" />
+	</target>
+	<taskdef name="testng" classname="org.testng.TestNGAntTask">
+		<classpath>
+			<pathelement location="${lib}/testng-6.9.10.jar" />
+		</classpath>
+	</taskdef>
+	<target name="runTest" depends="compile">
+		<echo message="running test..." />
+		<taskdef resource="testngtasks" classpathref="classpath" />
+		<testng classpathref="classpath" outputdir="${test.results.dir}//${run.time}" haltonfailure="false" useDefaultListeners="false" listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+			<xmlfileset dir="${test.scripts.dir}" includes="${testng.suite.file}" />
+			<sysproperty key="outputDir" value="${test.results.dir}/${run.time}/html" />
+			<sysproperty key="selenium.screenshots.dir" value="${test.results.dir}/${run.time}/img" />
+			<!--<sysproperty key="selenium.screenshots.relative.path" value="../img" />-->
+			<sysproperty key="org.uncommons.reportng.title" value="${report.title}" />
+		</testng>
+	</target>
+	<!-- below code is not working-->
+	<target name="openReport" depends="runTest">
+		<echo message="Opening report...." />
+		<exec executable="${browser}" spawn="yes">
+			<arg line="'${test.results.dir}/${run.time}/html/index.html'" />
+		</exec>
+	</target>
+</project>

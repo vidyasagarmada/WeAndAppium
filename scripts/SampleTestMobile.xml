@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Sample Mobile Test Execution">
+	<test name="SAMPLETESTMOBILE">
+		<classes>
+			<class name="com.dxc.setup.SetUpTearDown" />
+			<class name="com.dxc.scripts.SampleTestMobile">
+				<methods>
+					<include name="sampleTest1" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>
